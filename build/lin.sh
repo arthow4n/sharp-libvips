@@ -1,5 +1,5 @@
-#!/bin/sh
-set -e
+#!/bin/bash
+set -eo pipefail
 
 # Working directories
 DEPS=/deps
@@ -18,21 +18,21 @@ export CXXFLAGS="${FLAGS}"
 # Dependency version numbers
 VERSION_ZLIB=1.2.11
 VERSION_FFI=3.2.1
-VERSION_GLIB=2.55.1
-VERSION_XML2=2.9.7
-VERSION_GSF=1.14.42
+VERSION_GLIB=2.57.1
+VERSION_XML2=2.9.8
+VERSION_GSF=1.14.43
 VERSION_EXIF=0.6.21
 VERSION_LCMS2=2.9
 VERSION_JPEG=1.5.3
 VERSION_PNG16=1.6.34
-VERSION_WEBP=0.6.1
+VERSION_WEBP=1.0.0
 VERSION_TIFF=4.0.9
 VERSION_ORC=0.4.28
-VERSION_GDKPIXBUF=2.36.11
-VERSION_FREETYPE=2.9
+VERSION_GDKPIXBUF=2.36.12
+VERSION_FREETYPE=2.9.1
 VERSION_EXPAT=2.2.5
 VERSION_FONTCONFIG=2.12.6
-VERSION_HARFBUZZ=1.7.4
+VERSION_HARFBUZZ=1.8.0
 VERSION_PIXMAN=0.34.0
 VERSION_CAIRO=1.14.12
 VERSION_PANGO=1.41.0
@@ -51,6 +51,9 @@ without_patch() {
 # Check for newer versions
 ALL_AT_VERSION_LATEST=true
 version_latest() {
+  if [ "$1" == "jpeg" ]; then return; fi
+  if [ "$1" == "pango" ]; then return; fi
+  if [ "$1" == "svg" ]; then return; fi
   VERSION_LATEST=$(curl -s https://release-monitoring.org/api/project/$3 | jq -r '.version')
   if [ "$VERSION_LATEST" != "$2" ]; then
     ALL_AT_VERSION_LATEST=false
